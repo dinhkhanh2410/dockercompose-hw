@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    db:
+        container_name: db
+        image: mysql:5.7
+        volumes:
+            - /tmp/mysqldb01:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=example
+        networks:
+            - ghost-network
+
+    ghostfront:
+        container_name: ghostfront
+        image: ghost:alpine
+        depends_on:
+            - db
+        environment:
+            - database__client=mysql
+            - database__connection__host=db
+            - database__connection__user=root
+            - database__connection__password=example
+            - database__connection__database=ghost
+        ports:
+            - 8085:2368
+        networks:
+            - ghost-network
+
+networks:
+    ghost-network:
+        driver: bridge
