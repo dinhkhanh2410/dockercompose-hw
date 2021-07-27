@@ -16,6 +16,7 @@ services:
         image: ghost:alpine
         depends_on:
             - db
+        restart: on-failure
         environment:
             - database__client=mysql
             - database__connection__host=db
